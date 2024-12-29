@@ -9,4 +9,5 @@ import { PrismaModule } from 'src/lib/prisma.module';
   imports: [PrismaModule],
   exports: [BookService],
 })
+
 export class BookModule { }

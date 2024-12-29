@@ -15,6 +15,8 @@ import {
 import { BookService } from './book.service';
 import {
   ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiTags,
@@ -50,6 +52,20 @@ export class BookController {
       }
     })
   )
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Create a book with an image file',
+    schema: {
+      type: 'object',
+      properties: {
+        title: { type: 'string' },
+        author: { type: 'string' },
+        description: { type: 'string', nullable: true },
+        image: { type: 'string', format: 'binary' },
+      },
+      required: ['title', 'author', 'image'],
+    },
+  })
   @ApiCreatedResponse({ type: Object })
   async create(
     @UploadedFile() file: Express.Multer.File,
