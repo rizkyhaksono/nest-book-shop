@@ -96,10 +96,9 @@ export class BookController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: BookEntity })
-  async findByUser(@Param('uuid') id: string) {
-    await this.bookService.getBookById(id);
+  async findBookById(@Param('id') id: string) {
+    return await this.bookService.getBookById(id);
   }
-
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
