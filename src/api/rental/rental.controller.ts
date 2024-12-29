@@ -1,4 +1,4 @@
-import { Controller, Body, Post, Get, Delete, Patch, UseGuards } from '@nestjs/common';
+import { Controller, Body, Post, Get, Delete, Patch, UseGuards, Param } from '@nestjs/common';
 import { RentalService } from './rental.service';
 import {
   ApiBearerAuth,
@@ -35,7 +35,7 @@ export class RentalController {
   @UseGuards(JwtAuthGuard)
   @Get(":id")
   @ApiOkResponse({ type: RentalEntity })
-  async getRentalById(@Body() id: number) {
+  async getRentalById(@Param("id") id: number) {
     return await this.rentalService.getRentalById(id);
   }
 
@@ -49,9 +49,9 @@ export class RentalController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @Delete()
+  @Delete(":id")
   @ApiOkResponse({ type: RentalEntity })
-  async deleteRental(@Body() id: number) {
+  async deleteRental(@Param("id") id: string) {
     return await this.rentalService.deleteRental(id);
   }
 }

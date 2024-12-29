@@ -13,6 +13,29 @@ export class RentalService {
       throw new ConflictException("All fields are required");
     }
 
+    const book = await this.prisma.book.findUnique({
+      where: {
+        id: bookId
+      }
+    });
+
+    if (!book) {
+      throw new ConflictException(`Book not found with id: ${bookId}`);
+    }
+
+    if (!book.available) {
+      throw new ConflictException(`Book with id: ${bookId} is not available`);
+    }
+
+    await this.prisma.book.update({
+      where: {
+        id: bookId
+      },
+      data: {
+        available: false
+      }
+    });
+
     const createRental = await this.prisma.rental.create({
       data: {
         userId,
@@ -65,10 +88,33 @@ export class RentalService {
     }
   }
 
-  async deleteRental(id: number) {
+  async deleteRental(id: string) {
+    if (!id) {
+      throw new ConflictException("id is required");
+    }
+
+    const rental = await this.prisma.rental.findUnique({
+      where: {
+        id: parseInt(id)
+      }
+    });
+
+    if (!rental) {
+      throw new ConflictException(`Rental not found with id: ${id}`);
+    }
+
+    await this.prisma.book.update({
+      where: {
+        id: rental.bookId
+      },
+      data: {
+        available: true
+      }
+    });
+
     return this.prisma.rental.delete({
       where: {
-        id
+        id: parseInt(id)
       }
     });
   }

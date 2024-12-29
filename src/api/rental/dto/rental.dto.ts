@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class RentalDTO {
   @ApiProperty()
@@ -14,11 +15,13 @@ export class RentalDTO {
 
   @ApiProperty()
   @IsDate()
+  @Transform(({ value }) => new Date(value))
   @IsNotEmpty()
-  startDate: string;
+  startDate: Date;
 
   @ApiProperty()
   @IsDate()
+  @Transform(({ value }) => new Date(value))
   @IsNotEmpty()
-  endDate: string;
+  endDate: Date;
 }
