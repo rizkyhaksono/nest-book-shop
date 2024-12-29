@@ -5,6 +5,7 @@ import { AuthModule } from './api/auth/auth.module';
 import { UserModule } from './api/user/user.module';
 import { BookModule } from './api/book/book.module';
 import { CategoryModule } from './api/category/category.module';
+import { RentalModule } from './api/rental/rental.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { CategoryModule } from './api/category/category.module';
     UserModule,
     BookModule,
     CategoryModule,
+    RentalModule,
     ConfigModule.forRoot({ isGlobal: true })
   ],
   controllers: [],

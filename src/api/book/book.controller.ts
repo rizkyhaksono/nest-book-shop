@@ -10,7 +10,7 @@ import {
   UseInterceptors,
   UploadedFile,
   NotAcceptableException,
-  Res,
+  Res
 } from '@nestjs/common';
 import { BookService } from './book.service';
 import {
@@ -27,6 +27,7 @@ import { Response } from 'express';
 import { BookDTO } from './dto/book.dto';
 import { BookEntity } from './entity/book.entity';
 import { JwtAuthGuard } from 'src/lib/jwt.guard';
+import * as path from "path";
 
 @Controller("book")
 @ApiTags("book")
@@ -35,23 +36,24 @@ export class BookController {
 
   @Post()
   @UseInterceptors(
-    FileInterceptor("image", {
+    FileInterceptor('image', {
       storage: diskStorage({
-        destination: "../../../uploads",
+        destination: path.resolve(__dirname, '..', '..', '..', 'uploads'),
         filename: (req, file, cb) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
-          cb(null, file.fieldname + '-' + uniqueSuffix + '.jpg');
-        }
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          cb(null, `${file.fieldname}-${uniqueSuffix}.jpg`);
+        },
       }),
       fileFilter: (req, file, cb) => {
         if (!/\.(jpg|jpeg|png)$/.exec(file.originalname)) {
           return cb(new NotAcceptableException('Only jpg, jpeg, png files are allowed!'), false);
         }
         cb(null, true);
-      }
+      },
     })
   )
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'Create a book with an image file',
@@ -75,10 +77,9 @@ export class BookController {
   }
 
   @ApiBearerAuth()
-  @Get("image/:imgpath")
-  async serveImage(@Param("imgpath") imgpath: string, @Res() res: Response) {
-    const imagePath = await this.bookService.serveImage(imgpath);
-    res.sendFile(imagePath);
+  @Get('image/:imgpath')
+  async serveImage(@Param('imgpath') imgpath: string, @Res() res: Response) {
+    return await this.bookService.serveImage(`uploads/${imgpath}`);
   }
 
   @Get()

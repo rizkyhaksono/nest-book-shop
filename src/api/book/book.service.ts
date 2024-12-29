@@ -1,6 +1,7 @@
 import * as path from "path";
 import { join } from "path";
 import * as fs from "fs";
+import * as sharp from 'sharp';
 import { unlink } from "fs";
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from "src/lib/prisma.service";
@@ -18,31 +19,21 @@ export class BookService {
         title,
         author,
         description,
-        image: file.path
+        image: file.filename
       }
     });
 
     return {
       status: 201,
-      data: book
-    }
+      data: book,
+    };
   }
 
   async serveImage(imgpath: string) {
-    imgpath = imgpath.replace(/\\/g, '/');
-    const imagePath = path.resolve(
-      __dirname,
-      '..',
-      '..',
-      '..',
-      'uploads',
-      imgpath,
-    );
-
+    const imagePath = path.resolve(__dirname, '..', '..', '..', imgpath);
     if (!fs.existsSync(imagePath)) {
-      throw new NotFoundException(`The file ${imgpath} does not exist.`);
+      throw new NotFoundException('Image not found');
     }
-
     return imagePath;
   }
 

@@ -7,7 +7,7 @@ export class CategoryService {
   constructor(private readonly prisma: PrismaService) { }
 
   async createCategory(data: CategoryDTO) {
-    const { name } = CategoryDTO;
+    const { name } = data;
 
     if (!name) {
       throw new ConflictException("Name can't null");

@@ -4,6 +4,12 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 
 async function main() {
+  if (process.env.NODE_ENV === 'production') {
+    process.env.BASE_URL = process.env.BASE_URL_PROD;
+  } else {
+    process.env.BASE_URL = process.env.BASE_URL_DEV;
+  }
+
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
