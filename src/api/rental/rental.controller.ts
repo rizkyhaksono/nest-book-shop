@@ -35,7 +35,7 @@ export class RentalController {
   @UseGuards(JwtAuthGuard)
   @Get(":id")
   @ApiOkResponse({ type: RentalEntity })
-  async getRentalById(@Param("id") id: number) {
+  async getRentalById(@Param("id") id: string) {
     return await this.rentalService.getRentalById(id);
   }
 

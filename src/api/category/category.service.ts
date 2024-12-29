@@ -29,10 +29,10 @@ export class CategoryService {
     return this.prisma.category.findMany();
   }
 
-  async getCategoryById(id: number) {
+  async getCategoryById(id: string) {
     return this.prisma.category.findUnique({
       where: {
-        id
+        id: parseInt(id)
       }
     })
   }

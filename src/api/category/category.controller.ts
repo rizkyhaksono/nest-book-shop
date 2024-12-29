@@ -1,4 +1,4 @@
-import { Controller, Body, Post, Get, Delete, Patch, UseGuards } from '@nestjs/common';
+import { Controller, Body, Post, Get, Delete, Patch, UseGuards, Param } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import {
   ApiBearerAuth,
@@ -35,7 +35,7 @@ export class CategoryController {
   @UseGuards(JwtAuthGuard)
   @Get(":id")
   @ApiOkResponse({ type: CategoryEntity })
-  async getCategoryById(@Body() id: number) {
+  async getCategoryById(@Param("id") id: string) {
     return await this.categoryService.getCategoryById(id);
   }
 
@@ -51,7 +51,7 @@ export class CategoryController {
   @UseGuards(JwtAuthGuard)
   @Delete()
   @ApiOkResponse({ type: CategoryEntity })
-  async deleteCategory(@Body() id: number) {
+  async deleteCategory(@Param("id") id: number) {
     return await this.categoryService.deleteCategory(id);
   }
 }

@@ -55,12 +55,21 @@ export class RentalService {
     return this.prisma.rental.findMany();
   }
 
-  async getRentalById(id: number) {
-    return this.prisma.rental.findUnique({
+  async getRentalById(id: string) {
+    const rental = await this.prisma.rental.findUnique({
       where: {
-        id
+        id: parseInt(id)
       }
     })
+
+    if (!rental) {
+      throw new ConflictException(`Rental not found with id: ${id}`);
+    }
+
+    return {
+      status: 200,
+      data: rental
+    }
   }
 
   async updateRental(id: number, data: RentalDTO) {
