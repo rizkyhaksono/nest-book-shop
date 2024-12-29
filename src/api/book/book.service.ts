@@ -1,7 +1,6 @@
 import * as path from "path";
 import { join } from "path";
 import * as fs from "fs";
-import * as sharp from 'sharp';
 import { unlink } from "fs";
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from "src/lib/prisma.service";
@@ -30,11 +29,7 @@ export class BookService {
   }
 
   async serveImage(imgpath: string) {
-    const imagePath = path.resolve(__dirname, '..', '..', '..', imgpath);
-    if (!fs.existsSync(imagePath)) {
-      throw new NotFoundException('Image not found');
-    }
-    return imagePath;
+    return fs.createReadStream(join(process.cwd(), 'uploads', imgpath));
   }
 
   async getAllBooks() {

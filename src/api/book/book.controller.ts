@@ -79,7 +79,8 @@ export class BookController {
   @ApiBearerAuth()
   @Get('image/:imgpath')
   async serveImage(@Param('imgpath') imgpath: string, @Res() res: Response) {
-    return await this.bookService.serveImage(`uploads/${imgpath}`);
+    const imagePath = path.resolve(__dirname, '..', '..', '..', 'uploads', imgpath);
+    return res.sendFile(imagePath);
   }
 
   @Get()
