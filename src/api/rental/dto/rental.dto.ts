@@ -15,10 +15,10 @@ export class RentalDTO {
   @ApiProperty()
   @IsDate()
   @IsNotEmpty()
-  startDate: Date;
+  startDate: string;
 
   @ApiProperty()
   @IsDate()
   @IsNotEmpty()
-  endDate: Date;
+  endDate: string;
 }
